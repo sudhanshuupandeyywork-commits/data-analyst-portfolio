@@ -1,0 +1,33 @@
+// Power BI measures for the Superstore profitability report.
+// Assumes a table called Orders and a Date table related on Order Date.
+
+Revenue = SUM ( Orders[Sales] )
+
+Profit = SUM ( Orders[Profit] )
+
+Profit Margin % = DIVIDE ( [Profit], [Revenue] )
+
+Order Count = DISTINCTCOUNT ( Orders[Order ID] )
+
+Average Order Value = DIVIDE ( [Revenue], [Order Count] )
+
+Revenue LY = CALCULATE ( [Revenue], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+
+Revenue YoY % = DIVIDE ( [Revenue] - [Revenue LY], [Revenue LY] )
+
+Loss Making Lines =
+CALCULATE ( COUNTROWS ( Orders ), Orders[Profit] < 0 )
+
+Loss Making Share = DIVIDE ( [Loss Making Lines], COUNTROWS ( Orders ) )
+
+// Discount band for use as an axis
+Discount Band =
+SWITCH (
+    TRUE (),
+    Orders[Discount] = 0,   "a. No discount",
+    Orders[Discount] <= 0.2, "b. Up to 20%",
+    Orders[Discount] <= 0.4, "c. 20 to 40%",
+    "d. Above 40%"
+)
+// Add Discount Band as a calculated COLUMN on Orders, not a measure,
+// if you want to put it on a chart axis.

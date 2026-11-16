@@ -1,0 +1,21 @@
+// Measures for the HR attrition report. Table name: Employees.
+// Attrition is stored as "Yes" / "No" text.
+
+Headcount = COUNTROWS ( Employees )
+
+Leavers = CALCULATE ( COUNTROWS ( Employees ), Employees[Attrition] = "Yes" )
+
+Attrition Rate = DIVIDE ( [Leavers], [Headcount] )
+
+// How many times the company-wide rate this group is.
+// ALL() removes the filter so the denominator is the whole company.
+Attrition Lift =
+DIVIDE ( [Attrition Rate], CALCULATE ( [Attrition Rate], ALL ( Employees ) ) )
+
+Avg Tenure of Leavers =
+CALCULATE ( AVERAGE ( Employees[YearsAtCompany] ), Employees[Attrition] = "Yes" )
+
+Avg Monthly Income = AVERAGE ( Employees[MonthlyIncome] )
+
+// Use this as a label so small groups are visible next to the rate
+Sample Size Label = [Headcount] & " employees"

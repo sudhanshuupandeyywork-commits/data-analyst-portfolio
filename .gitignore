@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.pyc
+~$*
+.ipynb_checkpoints/
+
+# downloaded datasets: keep them local, link to the source in the README instead
+01-superstore-profitability/data/raw/*
+!01-superstore-profitability/data/raw/README.md
+03-hr-attrition/data/raw/*
+!03-hr-attrition/data/raw/README.md
+
+# generated databases
+*.db
